@@ -1,0 +1,25 @@
+name: Assume AWS Role
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write  # Permite usar OpenID Connect (OIDC)
+  contents: read
+
+jobs:
+  assume-role:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::058264466190:role/murilo_simples
+          role-session-name: GitHubActions
+          aws-region: us-east-1  # Substitua pela região desejada
+
+      - name: Testar Credenciais
+        run: aws sts get-caller-identity | base64
